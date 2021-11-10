@@ -20,10 +20,10 @@ body {
   .close:hover {
     cursor: pointer;
   }
-}
 
-.box:hover {
-  transform: scale(1.1);
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .App {
@@ -40,6 +40,17 @@ body {
   }
 }
 
+.form-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span {
+    margin-top: 10px;
+    color: #999;
+    font-size: 0.8rem;
+  }
+}
+
 .form-input {
   display: flex;
   flex-direction: row;
@@ -47,5 +58,29 @@ body {
   justify-content: center;
 }
 
-.input {
+.color-input {
+  border-radius: 0;
+  border: 1px solid #000;
+  height: 30px;
+}
+
+.add-button {
+  background-color: #fff;
+  color: #000;
+  border-radius: 0;
+  height: 30px;
+  transition: transform 2s;
+
+  &:disabled {
+    color: #888;
+  }
+}
+
+.form-filter {
+  margin-bottom: 20px;
+
+  label {
+    margin: 5px 5px;
+    white-space: nowrap;
+  }
 }

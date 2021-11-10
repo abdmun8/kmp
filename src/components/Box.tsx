@@ -8,11 +8,7 @@ type Props = Color & {
 const Box: React.FC<Props> = ({ id, color, isInitial, removeColor }) => {
   return (
     <div className="box-wrapper">
-      <div
-        className="box"
-        style={{ backgroundColor: color }}
-        data-color={color}
-      >
+      <div className="box" data-color={color}>
         {!isInitial && (
           <div onClick={() => removeColor(id)} className="close">
             &#10006;

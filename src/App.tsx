@@ -5,9 +5,11 @@ import Box from "./components/Box";
 import FormInput from "./components/FormInput";
 import FormFilter from "./components/FormFilter";
 import ColorStorage from "./utlis/ColorStorage";
+import { sortColors, reduceFilters, ColorFilter } from "./utlis/color";
 
 interface AppState {
   colors: ListColors;
+  filters: ColorFilter[];
 }
 
 class App extends React.Component<{}, AppState> {
@@ -16,23 +18,29 @@ class App extends React.Component<{}, AppState> {
     super(props);
     this.storage = new ColorStorage("color-storage");
     const savedColors: ListColors = this.storage.getAll();
-    const colors = initialColors.map((color: Color["color"]) =>
+    const colors: ListColors = initialColors.map((color: Color["color"]) =>
       this.newColor(color, true)
     );
     this.state = {
       colors: colors.concat(savedColors),
+      filters: [],
     };
   }
 
   componentDidMount() {
-    console.log("did mount");
-    console.log(this.storage.getAll());
+    this.setColor();
   }
 
-  public addColor = (color: Color["color"]) => {
-    const newColor = this.newColor(color);
-    this.storage.add(newColor);
-    this.setState((state) => ({ colors: [...state.colors, newColor] }));
+  componentDidUpdate() {
+    this.setColor();
+  }
+
+  private setColor = () => {
+    const boxes: NodeListOf<HTMLElement> =
+      window.document.querySelectorAll(".box");
+    boxes.forEach((item) => {
+      item.style.backgroundColor = item.dataset.color as string;
+    });
   };
 
   private newColor = (color: Color["color"], isInitial = false) => {
@@ -44,6 +52,12 @@ class App extends React.Component<{}, AppState> {
     return newColor;
   };
 
+  public addColor = (color: Color["color"]) => {
+    const newColor: Color = this.newColor(color);
+    this.storage.add(newColor);
+    this.setState((state) => ({ colors: [...state.colors, newColor] }));
+  };
+
   public removeColor = (id: Color["id"]) => {
     this.storage.remove(id);
     this.setState((state) => ({
@@ -51,14 +65,20 @@ class App extends React.Component<{}, AppState> {
     }));
   };
 
+  public setFilter = (filters: ColorFilter[]) => {
+    this.setState({ filters });
+  };
+
   render() {
-    const { colors } = this.state;
+    const { colors, filters }: AppState = this.state;
+    const filteredColors: ListColors = reduceFilters(filters, colors);
+    const sortedColors: ListColors = sortColors(filteredColors);
     return (
       <div className="App">
         <FormInput addColor={this.addColor} />
-        <FormFilter />
+        <FormFilter setFilter={this.setFilter} />
         <div className="boxes-container">
-          {colors.map((data) => {
+          {sortedColors.map((data: Color) => {
             return (
               <Box key={data.id} {...data} removeColor={this.removeColor} />
             );
