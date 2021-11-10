@@ -34,6 +34,7 @@ const FormFilter: React.FC<Props> = ({ setFilter }) => {
   return (
     <div>
       <form id="form-filter" className="form-filter" onChange={handleChange}>
+        {/* rgbs filter */}
         <h4>Filter:</h4>
         {colorFilters.map(({ label }) => (
           <label key={label}>

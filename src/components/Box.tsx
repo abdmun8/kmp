@@ -9,6 +9,7 @@ const Box: React.FC<Props> = ({ id, color, isInitial, removeColor }) => {
   return (
     <div className="box-wrapper">
       <div className="box" data-color={color}>
+        {/* show remove if not initial color */}
         {!isInitial && (
           <div onClick={() => removeColor(id)} className="close">
             &#10006;
